@@ -12,6 +12,13 @@ function minimax(newBoard, player, alpha = -Infinity, beta = Infinity) {
 
   let moves = [];
 
+  // Prioritize center, then corners, then edges
+  if (player === "O") {
+    availSpots = availSpots.sort((a, b) => {
+      return prioritizeMove(a) - prioritizeMove(b);
+    });
+  }
+
   for (let i = 0; i < availSpots.length; i++) {
     let move = {};
     move.index = availSpots[i];
@@ -64,6 +71,16 @@ function minimax(newBoard, player, alpha = -Infinity, beta = Infinity) {
   }
 
   return bestMove;
+}
+
+// Function to prioritize center > corners > edges
+function prioritizeMove(index) {
+  // Center has the highest priority
+  if (index === 4) return 1;
+  // Corners have the next priority
+  if (index === 0 || index === 2 || index === 6 || index === 8) return 2;
+  // Edges have the lowest priority
+  return 3;
 }
 
 function emptySquares(board) {
